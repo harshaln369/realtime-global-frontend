@@ -52,7 +52,7 @@ const Notes = () => {
   const { userId } = useParams();
 
   const handleEditSave = async (note) => {
-    if (editVal.trim() !== "") {
+    if (editVal.trim() !== "" && editPriority !== "") {
       note.history.unshift({
         note: note.note,
         contributedBy: note.contributedBy[note.contributedBy.length - 1],
@@ -87,7 +87,7 @@ const Notes = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (note.trim() !== "") {
+    if (note.trim() !== "" && priority !== "") {
       const noteData = {
         room: "app",
         createdBy: userId,
