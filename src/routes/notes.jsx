@@ -4,11 +4,11 @@ import io from "socket.io-client";
 import axios from "axios";
 import MultipleSelectChip from "../components/selectChip";
 import BasicSelect from "../components/basicSelect";
-
-const socket = io.connect(import.meta.env.VITE_BASE_URL);
+import { BASE_URL } from "../constants";
+const socket = io.connect(BASE_URL);
 
 export async function loader() {
-  const { data } = await axios.get(`${import.meta.env.VITE_BASE_URL}/notes`);
+  const { data } = await axios.get(`${BASE_URL}/notes`);
   return {
     fetchedNotes: data.data.notes,
     priorities: data.data.priorities,
@@ -17,10 +17,7 @@ export async function loader() {
 }
 
 const fetchNotes = async (filterData) => {
-  const { data } = await axios.post(
-    `${import.meta.env.VITE_BASE_URL}/filters`,
-    filterData
-  );
+  const { data } = await axios.post(`${BASE_URL}/filters`, filterData);
   return data;
 };
 
