@@ -8,18 +8,17 @@ import BasicSelect from "../components/basicSelect";
 import { BASE_URL } from "../constants";
 const socket = io.connect(BASE_URL);
 
-export async function loader() {
-  const { data } = await axios.get(`${BASE_URL}/notes`);
+export async function loader(filterData) {
+  const { data } = await axios.post(`${BASE_URL}/notes`, filterData);
   return {
     fetchedNotes: data.data.notes,
     priorities: data.data.priorities,
     users: data.data.users,
-    count: data.data.count,
   };
 }
 
 const fetchNotes = async (filterData) => {
-  const { data } = await axios.post(`${BASE_URL}/filters`, filterData);
+  const { data } = await axios.post(`${BASE_URL}/notes`, filterData);
   return data;
 };
 
@@ -34,7 +33,7 @@ const fetchNotes = async (filterData) => {
 // };
 
 const Notes = () => {
-  const { fetchedNotes, priorities, users /* count */ } = useLoaderData();
+  const { fetchedNotes, priorities, users } = useLoaderData();
   console.log("api data", fetchedNotes, priorities, users);
   const [note, setNote] = useState("");
   const [priority, setPriority] = useState("");
@@ -116,23 +115,21 @@ const Notes = () => {
   }, [socket]);
 
   useEffect(() => {
-    if (selectedUsers.length && selectedPriorities.length && sort !== "") {
-      const fetchData = async () => {
-        try {
-          const dataNotes = await fetchNotes({
-            selectedUsers,
-            selectedPriorities,
-            sort,
-          });
-          console.log("dataNotes", dataNotes);
+    const fetchData = async () => {
+      try {
+        const dataNotes = await fetchNotes({
+          selectedUsers,
+          selectedPriorities,
+          sort,
+        });
+        console.log("dataNotes", dataNotes);
 
-          setNotes(dataNotes.data);
-        } catch (error) {
-          console.log("error", error);
-        }
-      };
-      fetchData();
-    }
+        setNotes(dataNotes.data.notes);
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+    fetchData();
   }, [selectedUsers, selectedPriorities, sort]);
 
   return (
