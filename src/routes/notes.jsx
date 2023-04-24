@@ -54,7 +54,7 @@ const Notes = () => {
   const { fetchedNotes, priorities, users, count } = useLoaderData();
   console.log("api data", fetchedNotes, priorities, users);
   const [note, setNote] = useState("");
-  const [priority, setPriority] = useState("");
+  const [priority, setPriority] = useState("Medium");
   console.log("priority", priority);
   const [notes, setNotes] = useState(fetchedNotes);
   console.log("notes", notes);
@@ -156,8 +156,6 @@ const Notes = () => {
       <Container sx={{ marginBottom: "1rem" }}>
         <Paper
           variant="outlined"
-          rounded={true}
-          elevation={5}
           sx={{
             borderRadius: "1rem",
             marginTop: "3rem",
@@ -206,8 +204,6 @@ const Notes = () => {
       <Container>
         <Paper
           variant="outlined"
-          rounded={true}
-          elevation={5}
           sx={{
             marginTop: "3rem",
             padding: "2rem",

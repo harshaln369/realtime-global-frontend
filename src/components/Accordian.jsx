@@ -5,7 +5,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import BasicSelect from "./basicSelect";
-import { Button, IconButton, Paper } from "@mui/material";
+import { IconButton, Paper } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
@@ -28,7 +28,7 @@ export default function ControlledAccordions({
   };
 
   return (
-    <Paper elevation={1} variant="outlined" sx={{ margin: "1rem 0" }}>
+    <Paper elevation={1} sx={{ margin: "1rem 0" }}>
       <Accordion
         expanded={expanded === "panel1"}
         onChange={handleChange("panel1")}
@@ -90,6 +90,7 @@ export default function ControlledAccordions({
                   e.stopPropagation();
                   setIsEdit({ value: true, _id: note._id });
                   setEditVal(note.note);
+                  setEditPriority(note.priority);
                 }}
                 sx={{ marginLeft: "auto" }}
               >
@@ -117,6 +118,7 @@ export default function ControlledAccordions({
                 key={el.id}
               >{`Note: ${el.note}, ContributedBy: ${el.contributedBy}`}</li>
             ))}
+            {note.history.length <= 0 && <p>No History Found</p>}
           </ul>
         </AccordionDetails>
       </Accordion>
