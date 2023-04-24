@@ -6,6 +6,16 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import MultipleSelectChip from "../components/selectChip";
 import BasicSelect from "../components/basicSelect";
 import { BASE_URL } from "../constants";
+import ResponsiveAppBar from "../components/AppBar";
+import {
+  Button,
+  CircularProgress,
+  Container,
+  Paper,
+  TextField,
+  Typography,
+} from "@mui/material";
+import ControlledAccordions from "../components/Accordian";
 const socket = io.connect(BASE_URL);
 
 export async function loader(filterData) {
@@ -142,118 +152,135 @@ const Notes = () => {
 
   return (
     <>
-      <h1>Notes</h1>
+      <ResponsiveAppBar user={userId} />
+      <Container sx={{ marginBottom: "1rem" }}>
+        <Paper
+          variant="outlined"
+          rounded={true}
+          elevation={5}
+          sx={{
+            borderRadius: "1rem",
+            marginTop: "3rem",
+            padding: "2rem",
+            background: "#FDF4F5",
+          }}
+        >
+          <form onSubmit={handleSubmit}>
+            <Typography variant="h5">Add a Note</Typography>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "flex-start",
+                alignItems: "center",
+              }}
+            >
+              <TextField
+                type="text"
+                placeholder="Note..."
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                label="Add Note"
+                variant="outlined"
+                sx={{ margin: "1rem 1rem", width: "90%" }}
+              />
 
-      <h5>Logged in as: {userId}</h5>
-      <div>
-        <form onSubmit={handleSubmit}>
-          <h3>Add a Note</h3>
+              <BasicSelect
+                items={["High", "Medium", "Low"]}
+                name="Priority"
+                select={priority}
+                setSelect={setPriority}
+              />
+            </div>
+            <Button
+              type="submit"
+              variant="contained"
+              size="large"
+              sx={{ marginTop: "1rem" }}
+            >
+              Add
+            </Button>
+          </form>
+        </Paper>
+      </Container>
 
-          <input
-            type="text"
-            placeholder="Note..."
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
-          />
-
-          <BasicSelect
-            items={["High", "Medium", "Low"]}
-            name="Priority"
-            select={priority}
-            setSelect={setPriority}
-          />
-          <button type="submit">Add</button>
-        </form>
-      </div>
-
-      <div>
-        <div>Filters: </div>
-        <MultipleSelectChip
-          items={users.map((user) => user.name)}
-          name="Users"
-          selected={selectedUsers}
-          setSelected={setSelectedUsers}
-        />
-        <MultipleSelectChip
-          items={priorities}
-          name="Priority"
-          selected={selectedPriorities}
-          setSelected={setSelectedPriorities}
-        />
-        <div>Sort by:</div>
-        <BasicSelect
-          items={["Alphabetical Order", "Created At", "Updated At"]}
-          name="Sort"
-          select={sort}
-          setSelect={setSort}
-        />
-        <ul>
-          <InfiniteScroll
-            dataLength={notes.length} //This is important field to render the next data
-            next={() => fetchMoreData(notes, setNotes, setHasMore, count)}
-            hasMore={hasMore}
-            loader={<h4>Loading...</h4>}
-            endMessage={
-              <p style={{ textAlign: "center" }}>
-                <b>Yay! You have seen it all</b>
-              </p>
-            }
+      <Container>
+        <Paper
+          variant="outlined"
+          rounded={true}
+          elevation={5}
+          sx={{
+            marginTop: "3rem",
+            padding: "2rem",
+            borderRadius: "1rem",
+            background: "#FDF4F5",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
           >
-            {notes?.length ? (
-              notes.map((note) => (
-                <li key={note.createdAt}>
-                  {isEdit.value && isEdit._id === note._id ? (
-                    <>
-                      <input
-                        type="text"
-                        value={editVal}
-                        onChange={(e) => setEditVal(e.target.value)}
-                      />
-
-                      <BasicSelect
-                        items={["High", "Medium", "Low"]}
-                        name="Priority"
-                        select={editPriority}
-                        setSelect={setEditPriority}
-                      />
-                      <button onClick={() => handleEditSave(note)}>Save</button>
-                    </>
-                  ) : (
-                    <>
-                      <h4>{note.note}</h4>
-                      <h6>{note.priority}</h6>
-                      <div>{`Contributed By: ${[
-                        ...new Set(note.contributedBy),
-                      ].join(", ")}`}</div>
-                      <h6>History</h6>
-                      <ul>
-                        {note.history.map((el) => (
-                          <li
-                            key={el.id}
-                          >{`Note: ${el.note}, ContributedBy: ${el.contributedBy}`}</li>
-                        ))}
-                      </ul>
-                      <button
-                        onClick={() => {
-                          setIsEdit({ value: true, _id: note._id });
-                          setEditVal(note.note);
-                        }}
-                      >
-                        Edit
-                      </button>
-                      <button onClick={() => handleDelete({ _id: note._id })}>
-                        Delete
-                      </button>
-                    </>
-                  )}
-                </li>
-              ))
-            ) : (
-              <h4>No Notes Found</h4>
-            )}
-          </InfiniteScroll>
-        </ul>
-      </div>
+            <Typography variant="h6">Filters: </Typography>
+            <MultipleSelectChip
+              items={users.map((user) => user.name)}
+              name="Users"
+              selected={selectedUsers}
+              setSelected={setSelectedUsers}
+            />
+            <MultipleSelectChip
+              items={priorities}
+              name="Priority"
+              selected={selectedPriorities}
+              setSelected={setSelectedPriorities}
+            />
+            <Typography variant="h6">Sort by:</Typography>
+            <BasicSelect
+              items={["Alphabetical Order", "Created At", "Updated At"]}
+              name="Sort"
+              select={sort}
+              setSelect={setSort}
+            />
+          </div>
+          <ul>
+            <InfiniteScroll
+              dataLength={notes.length} //This is important field to render the next data
+              next={() => fetchMoreData(notes, setNotes, setHasMore, count)}
+              hasMore={hasMore}
+              loader={
+                <div style={{ textAlign: "center", margin: "1rem" }}>
+                  <CircularProgress />
+                </div>
+              }
+              endMessage={
+                <p style={{ textAlign: "center" }}>
+                  <b>Yay! You have seen it all</b>
+                </p>
+              }
+            >
+              {notes?.length ? (
+                notes.map((note) => (
+                  <ControlledAccordions
+                    note={note}
+                    isEdit={isEdit}
+                    setIsEdit={setIsEdit}
+                    editVal={editVal}
+                    setEditVal={setEditVal}
+                    editPriority={editPriority}
+                    setEditPriority={setEditPriority}
+                    handleEditSave={handleEditSave}
+                    handleDelete={handleDelete}
+                    key={note._id}
+                  />
+                ))
+              ) : (
+                <h4>No Notes Found</h4>
+              )}
+            </InfiniteScroll>
+          </ul>
+        </Paper>
+      </Container>
     </>
   );
 };

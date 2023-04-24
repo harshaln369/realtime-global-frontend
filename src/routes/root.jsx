@@ -1,4 +1,7 @@
+import { Card, Paper, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
+import ResponsiveAppBar from "../components/AppBar";
+import profile from "../assets/profile_placeholder.jpg";
 
 const users = [
   { name: "User 1", userId: "user01" },
@@ -9,14 +12,36 @@ const users = [
 const Root = () => {
   return (
     <div>
-      <h1>Select User</h1>
-      <ul>
+      <ResponsiveAppBar />
+      <Typography variant="h1" mt={10} sx={{ textAlign: "center" }}>
+        Select User
+      </Typography>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         {users.map((user) => (
-          <li key={user.userId}>
-            <Link to={`/notes/${user.userId}`}>{user.name}</Link>
-          </li>
+          <Link to={`/notes/${user.userId}`}>
+            <Paper
+              key={user.userId}
+              sx={{
+                height: "250px",
+                width: "200px",
+                textAlign: "center",
+                textJustify: "auto",
+                margin: "2rem",
+                background: "#BA90C6",
+              }}
+            >
+              <img src={profile} alt="profile" width="100%" />
+              <Typography variant="h6">{user.name}</Typography>
+            </Paper>
+          </Link>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };
