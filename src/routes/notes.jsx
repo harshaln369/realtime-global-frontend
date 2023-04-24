@@ -120,14 +120,15 @@ const Notes = () => {
 
       await socket.emit("add_note", noteData);
       setNote("");
-      setPriority("");
+      setPriority("Medium");
     }
   };
 
   useEffect(() => {
     socket.on("list_note", (data) => {
       console.log("data", data);
-      setNotes(data);
+      setNotes(data.notes);
+      setHasMore(data.recCount > 10 ? true : false);
     });
     return () => socket.off("list_note");
   }, [socket]);
