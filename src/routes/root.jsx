@@ -21,10 +21,11 @@ const Root = () => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          flexWrap: "wrap",
         }}
       >
         {users.map((user) => (
-          <Link to={`/notes/${user.userId}`}>
+          <Link to={`/notes/${user.userId}`} key={user.name}>
             <Paper
               key={user.userId}
               sx={{
@@ -33,7 +34,7 @@ const Root = () => {
                 textAlign: "center",
                 textJustify: "auto",
                 margin: "2rem",
-                background: "#BA90C6",
+                background: "#E8A0BF",
               }}
             >
               <img src={profile} alt="profile" width="100%" />
