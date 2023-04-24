@@ -1,4 +1,4 @@
-import { Card, Paper, Typography } from "@mui/material";
+import { Paper, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import ResponsiveAppBar from "../components/AppBar";
 import profile from "../assets/profile_placeholder.jpg";

@@ -11,8 +11,8 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
 import logo from "../assets/rgna-logo-new.png";
+import { Link } from "react-router-dom";
 
 const pages = [];
 const settings = ["Logout"];
@@ -131,11 +131,18 @@ function ResponsiveAppBar({ user }) {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center" component="a" href="/">
+                <Link
+                  to="/"
+                  style={{
+                    textDecoration: "none",
+                    fontWeight: "bold",
+                    color: "black",
+                  }}
+                >
+                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
                     {setting}
-                  </Typography>
-                </MenuItem>
+                  </MenuItem>
+                </Link>
               ))}
             </Menu>
           </Box>
